@@ -1,7 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.16.0/.schema/devbox.schema.json",
   "packages": {
-    "github:nixos/nixpkgs/7ab501fef80324348405def21f79bcdbe8b35196#beam28Packages.elixir_1_19": {}
+    "github:nixos/nixpkgs/7ab501fef80324348405def21f79bcdbe8b35196#beam28Packages.elixir_1_19": {},
+    "postgresql_18": "18.0"
   },
   "env": {
     "ERL_AFLAGS": "-kernel shell_history enabled shell_history_path '\".devbox/virtenv/erlang_history\"'",

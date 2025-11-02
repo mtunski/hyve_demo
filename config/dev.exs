@@ -2,8 +2,7 @@ import Config
 
 # Configure your database
 config :hyve_demo, HyveDemo.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: System.get_env("USER"),
   hostname: "localhost",
   database: "hyve_demo_dev",
   stacktrace: true,

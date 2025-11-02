@@ -6,7 +6,7 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :hyve_demo, HyveDemo.Repo,
-  username: "postgres",
+  username: System.get_env("USER"),
   password: "postgres",
   hostname: "localhost",
   database: "hyve_demo_test#{System.get_env("MIX_TEST_PARTITION")}",
