@@ -1,0 +1,80 @@
+name: CI/CD
+
+on: push
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    env:
+      MIX_ENV: test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install devbox
+        uses: jetpack-io/devbox-install-action@v0.14.0
+        with:
+          enable-cache: true
+
+      - name: Set Elixir version
+        run: |
+          devbox run mix local.hex --force
+          echo "elixir-version=$(devbox run mix hex.info | awk '/Elixir:|OTP:/{printf "%s", (NR>2?"_":"") $2}')" >> $GITHUB_ENV
+
+      - name: Fetch deps cache
+        id: cache-deps
+        uses: actions/cache@v3
+        with:
+          path: deps/
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-deps-
+
+      - name: Fetch build cache
+        id: cache-build
+        uses: actions/cache@v3
+        with:
+          path: _build/
+          key: ${{ runner.os }}-build-${{ env.elixir-version }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.elixir-version }}-
+
+      - name: Fetch Hex cache
+        uses: actions/cache@v3
+        id: cache-hex
+        with:
+          path: .devbox/virtenv/hex/
+          key: ${{ runner.os }}-hex-${{ env.elixir-version }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-hex-${{ env.elixir-version }}-
+
+      - name: Install deps
+        run: devbox run mix deps.get
+
+      - name: Compile
+        run: devbox run mix compile --warnings-as-errors
+
+      - name: Setup & start DB
+        run: |
+          devbox run initdb
+          # do not use devbox services because it installs process compose which is pretty time consuming
+          devbox run pg_ctl start -o "-k ${{ github.workspace }}/.devbox/virtenv/postgresql_18"
+
+      # - name: Check Formatting
+      #   run: devbox run mix format --check-formatted
+
+      - name: Run tests
+        run: devbox run mix test
+
+  # deploy:
+  #   name: Deploy
+  #   runs-on: ubuntu-latest
+  #   needs: test
+  #   if: github.ref == 'refs/heads/main'
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: superfly/flyctl-actions/setup-flyctl@master
+  #     - run: flyctl deploy --remote-only
+  #       env:
+  #         FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
