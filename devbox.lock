@@ -1,0 +1,13 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "last_modified": "2025-10-31T03:13:32Z",
+      "resolved": "github:NixOS/nixpkgs/a7fc11be66bdfb5cdde611ee5ce381c183da8386?lastModified=1761880412"
+    },
+    "github:nixos/nixpkgs/7ab501fef80324348405def21f79bcdbe8b35196#beam28Packages.elixir_1_19": {
+      "last_modified": "1970-01-01T00:00:00Z",
+      "resolved": "github:nixos/nixpkgs/7ab501fef80324348405def21f79bcdbe8b35196#beam28Packages.elixir_1_19"
+    }
+  }
+}

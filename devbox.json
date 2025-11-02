@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.16.0/.schema/devbox.schema.json",
+  "packages": {
+    "github:nixos/nixpkgs/7ab501fef80324348405def21f79bcdbe8b35196#beam28Packages.elixir_1_19": {}
+  },
+  "env": {
+    "ERL_AFLAGS": "-kernel shell_history enabled shell_history_path '\".devbox/virtenv/erlang_history\"'",
+    "HEX_HOME": "$PWD/.devbox/virtenv/hex",
+    "MIX_HOME": "$PWD/.devbox/virtenv/mix"
+  },
+  "shell": {
+    "init_hook": [
+      "unset DEVELOPER_DIR"
+    ]
+  }
+}
